@@ -9,7 +9,6 @@ app.use(cors())
 app.use(express.json())
 
 app.post("/register", async (req, res) => {
-    console.log(req.body)
 
     //Checking for empty fields
     if(!req.body.username || !req.body.email || !req.body.password){
@@ -27,6 +26,7 @@ app.post("/register", async (req, res) => {
         password: req.body.password,
     })
 
+    console.log(users)
     res.send({
         status: "Saved",
         message: "User has been saved"
