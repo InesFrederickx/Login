@@ -13,6 +13,28 @@ app.use(express.urlencoded({extended:false}));
 app.use(cors())
 app.use(express.json())
 
+app.get("/testMongo", async (req,res) => {
+    try{
+        //Connect to the db
+        await client.connect();
+
+        //Retrieve the users collection data
+        const colli = client.db('loginsystem').collection('users');
+        const users = await colli.find({}).toArray();
+
+        //Send back the data with the response
+        res.status(200).send(users);
+    }catch(error){
+        console.log(error)
+        res.status(500).send({
+            error: 'Something went wrong!',
+            value: error
+        });
+    }finally {
+        await client.close();
+    }
+})
+
 app.post("/register", async (req, res) => {
 
     //Checking for empty fields
