@@ -1,6 +1,11 @@
 const express = require('express')
 const app = express()
 const cors = require('cors')
+const { MongoClient } = require('mongodb')
+
+require('dotenv').config()
+
+const client = new MongoClient(process.env.FINAL_URL)
 
 let users= [];
 
