@@ -26,12 +26,48 @@ app.post("/register", async (req, res) => {
         password: req.body.password,
     })
 
-    console.log(users)
+    //Send back response when user is saved
     res.send({
         status: "Saved",
         message: "User has been saved"
     })
 
+})
+
+app.post("/login", async (req, res) => {
+
+    //Checking for empty fields
+    if(!req.body.email || !req.body.password){
+        res.status(401).send({
+            status: "Bad Request",
+            message: "One or more of these fields are missing: email, password"
+        })
+        return
+    }
+
+    //Check for the users in the array
+    let user = users.find(element => element.email == req.body.email)
+    if(user){
+        //User found --> compare passwords
+        if(user.password == req.body.password){
+            res.status(200).send({
+                status: "Authentication succesfull",
+                message: "You are logged in!"
+            })
+        } else{
+            //Password is incorrect
+            res.status(401).send({
+                status: "Authentication error",
+                message: "Password is incorrect!"
+            })
+        }
+    } else{
+        //No user --> send back error
+        res.status(401).send({
+            status: "Authentication error",
+            message: "No user with this email has been found! Make sure you register first."
+        })
+    }
 })
 
 app.listen(3000);
